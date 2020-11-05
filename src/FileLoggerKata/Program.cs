@@ -1,12 +1,9 @@
-﻿using System;
-
-namespace FileLoggerKata
+﻿namespace FileLoggerKata
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
     }
 }
