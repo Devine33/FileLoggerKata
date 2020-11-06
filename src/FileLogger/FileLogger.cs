@@ -7,8 +7,8 @@ namespace FileLogger
         private const string Extension = ".txt";
         private const string FileName = "log";
         private readonly IFileProvider _fileProvider;
-        private readonly string _date = $"{DateTime.Today.Year}{DateTime.Today.Month}{DateTime.Today.Day}";
-        public string FullFileName => FileName + _date + Extension;
+        private DateTime _date = DateTime.Today;
+        public string FullFileName => $"{FileName}{_date:yyyyMMdd}{Extension}";
         public FileLogger(IFileProvider provider)
         {
             _fileProvider = provider;

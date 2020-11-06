@@ -8,9 +8,9 @@ namespace FileLogger.Tests
     {
         private Mock<IFileProvider> _fileProviderMock;
         private FileLogger _logger;
-        private string _testMessage = "test";
+        private readonly string _testMessage = "test";
         private DateTime DefaultToday => DateTime.Today;
-        private string Filename => $"log{DefaultToday:yyyy:MM:dd}.txt";
+        private string Filename => $"log{DefaultToday:yyyyMMdd}.txt";
 
         [SetUp]
         public void Setup()
