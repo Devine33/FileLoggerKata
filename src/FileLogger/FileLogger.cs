@@ -4,26 +4,47 @@ namespace FileLogger
 {
     public class FileLogger
     {
-        private const string Extension = ".txt";
-        private const string FileName = "log";
-        private readonly IFileProvider _fileProvider;
-        private DateTime _date = DateTime.Today;
-        public string FullFileName => $"{FileName}{_date:yyyyMMdd}{Extension}";
-        public FileLogger(IFileProvider provider)
+        private IFileProvider _fileProvider;
+        private IDateProvider _dateProvider;
+        private string _fileName = "log";
+        private string _logExtension = ".txt";
+        private DateTime Today => DateTime.Today;
+        private string WeekendFile => $"weekend.txt";
+
+        public FileLogger(IFileProvider provider, IDateProvider iDateProvider = null)
         {
             _fileProvider = provider;
+            _dateProvider = iDateProvider;
         }
+
         public void Log(string message)
         {
+            var fileName = GetFileName();
 
-            if (!_fileProvider.FileExists(FullFileName))
+            if (!_fileProvider.FileExists(fileName))
             {
-                _fileProvider.CreateFile(FullFileName);
+                _fileProvider.CreateFile(fileName);
             }
 
-            _fileProvider.Append(message);
+            _fileProvider.Append(fileName, message);
+        }
+
+        public bool IsWeekend()
+        {
+            return _dateProvider.IsWeekend();
         }
 
 
+        private string FileName => $"{_fileName}{Today:yyyyMMdd}{_logExtension}";
+
+        public string GetFileName()
+        {
+            return IsWeekend() ? WeekendFile : FileName;
+        }
+    }
+
+    public interface IDateProvider
+    {
+        public bool IsWeekend();
     }
 }
