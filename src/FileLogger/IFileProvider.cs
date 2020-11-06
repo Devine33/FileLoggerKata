@@ -3,7 +3,7 @@
     public interface IFileProvider
     {
         public void Append(string message);
-        public bool FileExists();
-        public void CreateFile();
+        public bool FileExists(string file);
+        public void CreateFile(string file);
     }
 }
