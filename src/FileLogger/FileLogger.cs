@@ -4,11 +4,12 @@ namespace FileLogger
 {
     public class FileLogger
     {
-        private IFileProvider _fileProvider;
-        private IDateProvider _dateProvider;
-        private string _fileName = "log";
-        private string _logExtension = ".txt";
-        private DateTime Today => DateTime.Today;
+        private readonly IFileProvider _fileProvider;
+        private readonly IDateProvider _dateProvider;
+
+        private readonly string _fileName = "log";
+        private readonly string _logExtension = ".txt";
+ 
         private string WeekendFile => $"weekend.txt";
 
         public FileLogger(IFileProvider provider, IDateProvider iDateProvider = null)
@@ -19,6 +20,13 @@ namespace FileLogger
 
         public void Log(string message)
         {
+
+            if (DoesPreviousWeekendLogExist())
+            {
+                RenamePreviousLog();
+            }
+
+
             var fileName = GetFileName();
 
             if (!_fileProvider.FileExists(fileName))
@@ -29,15 +37,29 @@ namespace FileLogger
             _fileProvider.Append(fileName, message);
         }
 
-        public bool IsWeekend()
+        private bool IsWeekend()
         {
             return _dateProvider.IsWeekend();
         }
 
 
-        private string FileName => $"{_fileName}{Today:yyyyMMdd}{_logExtension}";
+        private void RenamePreviousLog()
+        {
+            DateTime fileDate = _fileProvider.GetCreationDate(WeekendFile);
+            _fileProvider.Rename(WeekendFile,$"weekend-{fileDate:yyyyMMdd}.txt");
+        }
 
-        public string GetFileName()
+        private bool DoesPreviousWeekendLogExist()
+        {
+            return _fileProvider.FileExists(WeekendFile);
+        }
+
+
+
+
+        private string FileName => $"{_fileName}{_dateProvider.Today:yyyyMMdd}{_logExtension}";
+
+        private string GetFileName()
         {
             return IsWeekend() ? WeekendFile : FileName;
         }
@@ -46,5 +68,7 @@ namespace FileLogger
     public interface IDateProvider
     {
         public bool IsWeekend();
+        public DateTime GetPreviousWeekend();
+        public DateTime Today { get; }
     }
 }
