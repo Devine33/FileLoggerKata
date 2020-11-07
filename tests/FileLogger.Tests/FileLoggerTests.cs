@@ -8,11 +8,12 @@ namespace FileLogger.Tests
     {
         private Mock<IFileProvider> _fileProviderMock;
         private Mock<IDateProvider> _dateProviderMock;
+        private string FileName => $"log{DateTime.Today:yyyyMMdd}.txt";
         private FileLogger _logger;
         private readonly string _testMessage = "test";
         private readonly DateTime _saturday = new DateTime(2020, 11, 7);
-        private static readonly DateTime Sunday = new DateTime(2020,11 , 8);
-        private string FileName => $"log{DateTime.Today:yyyyMMdd}.txt";
+        private static readonly DateTime Sunday = new DateTime(2020, 11, 8);
+
 
         [SetUp]
         public void Setup()
@@ -75,7 +76,7 @@ namespace FileLogger.Tests
         }
 
         [Test]
-        public void WeekendLogFileRenamedOnWeekendIfPreviousExistsSunday()
+        public void WeekendLogFileRenamedOnWeekendIfPreviousExists()
         {
             var lastSunday = Sunday.AddDays(-7);
             var secondOfLastSunday = lastSunday.Add(new TimeSpan(23, 59, 59));

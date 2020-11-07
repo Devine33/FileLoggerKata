@@ -54,21 +54,11 @@ namespace FileLogger
             return _fileProvider.FileExists(WeekendFile);
         }
 
-
-
-
         private string FileName => $"{_fileName}{_dateProvider.Today:yyyyMMdd}{_logExtension}";
 
         private string GetFileName()
         {
             return IsWeekend() ? WeekendFile : FileName;
         }
-    }
-
-    public interface IDateProvider
-    {
-        public bool IsWeekend();
-        public DateTime GetPreviousWeekend();
-        public DateTime Today { get; }
     }
 }
